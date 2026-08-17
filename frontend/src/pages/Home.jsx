@@ -37,11 +37,11 @@ function Home() {
                             <p className="text-[13px] text-slate-500 ">Please login to continue   </p>
                         </div>
 
-                        <button className=" w-full   flex items-center justify-center gap-3 py-[11px] rounded-xl text-sm font-medium  bg-white hover:from-indigo-400  hover:to-violet-600 active:from-indigo-600 active:to-violet-600  border  border-indigo-500/30
-                         shadow-lg shadow-indigo-500/20  hover:shadow-indigo-500/30  transition-all duration-150 cursor-pointer 
-                      ">
-                            <FcGoogle size={15} className="text-white" />
-                            Continue with Google
+                        <button
+                            onClick={googlelogin}
+                            className=" w-full   flex items-center justify-center gap-3 py-[11px] rounded-xl text-sm font-medium text-black/90  bg-white  hover:bg-gray-200  transition-all duration-150 cursor-pointer  ">
+                            <FcGoogle size={15} />
+                            Continue with  google
                         </button>
 
                     </div>
