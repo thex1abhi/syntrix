@@ -8,7 +8,7 @@ function Home() {
 
     const handleLogin = async (token) => {
         try {
-            const { data } = await api.post("/auth/login", { token })
+            const { data } = await api.post("/api/auth/login", { token })
             console.log(data);
         } catch (error) {
             console.log(error);
@@ -41,7 +41,7 @@ function Home() {
                             onClick={googlelogin}
                             className=" w-full   flex items-center justify-center gap-3 py-[11px] rounded-xl text-sm font-medium text-black/90  bg-white  hover:bg-gray-200  transition-all duration-150 cursor-pointer  ">
                             <FcGoogle size={15} />
-                            Continue with  google
+                            Continue with  google 
                         </button>
 
                     </div>
