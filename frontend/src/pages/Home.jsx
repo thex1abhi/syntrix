@@ -3,8 +3,12 @@ import React from "react";
 import api from "../../utils/axios";
 import { auth, googleProvider } from "../../utils/firebase";
 import { FcGoogle } from "react-icons/fc";
+import { useSelector } from "react-redux";
 
 function Home() {
+
+    const { userData } = useSelector(state => state.user)
+    console.log(userData);
 
     const handleLogin = async (token) => {
         try {
@@ -41,7 +45,7 @@ function Home() {
                             onClick={googlelogin}
                             className=" w-full   flex items-center justify-center gap-3 py-[11px] rounded-xl text-sm font-medium text-black/90  bg-white  hover:bg-gray-200  transition-all duration-150 cursor-pointer  ">
                             <FcGoogle size={15} />
-                            Continue with  google 
+                            Continue with  google
                         </button>
 
                     </div>
