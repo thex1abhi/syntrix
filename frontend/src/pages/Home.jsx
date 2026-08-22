@@ -3,18 +3,20 @@ import React from "react";
 import api from "../../utils/axios";
 import { auth, googleProvider } from "../../utils/firebase";
 import { FcGoogle } from "react-icons/fc";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserdata } from "../redux/userSlice.js";
 
 function Home() {
 
+    const dispatch = useDispatch();
     const { userData } = useSelector(state => state.user)
     console.log(userData);
 
     const handleLogin = async (token) => {
         try {
             const { data } = await api.post("/api/auth/login", { token })
-            console.log(data);
-        } catch (error) {
+            dispatch(setUserdata(data))
+        } catch (error) { 
             console.log(error);
         }
     }
@@ -30,8 +32,7 @@ function Home() {
     return (
         <>
             <div className="h-screen flex  bg-[#0d0f14] text-white overflow-hidden  ">
-
-                <div className="fixed inset-0 z-50  flex items-center justify-center 
+                {!userData && <div className="fixed inset-0 z-50  flex items-center justify-center 
                  bg-black/60   backdrop-blur-sm ">
                     <div className="w-[340px] bg-[#13151c] border border-white/[0.08] 
                      rounded-2xl  p-7 flex flex-col  gap-5   ">
@@ -49,7 +50,8 @@ function Home() {
                         </button>
 
                     </div>
-                </div>
+                </div>}
+
             </div>
         </>
     )
