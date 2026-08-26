@@ -11,5 +11,19 @@ const groq = new ChatGroq({
 
 const gemini = new ChatGoogleGenerativeAI({
     //gemini key is from abhishek84
-    model: "gemini-2.5-pro",
-}) 
+    model: "gemini-2.5-flash",
+})
+
+export const getModel = async (agent) => {
+    switch (agent) {
+        case "chat":
+            return groq;
+        case "search":
+            return groq;
+        case "coding":
+            return gemini;
+        default:
+            return groq;
+    }
+
+}
