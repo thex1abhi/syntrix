@@ -2,7 +2,9 @@
 import React from "react";
 
 function ChatArea() {
-  return <div>ChatArea</div>;
+  return(
+    <div className="flex-1 flex flex-col  " > chat  </div>
+  ) 
 }
 
 export default ChatArea;

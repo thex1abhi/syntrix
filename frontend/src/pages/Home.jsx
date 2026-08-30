@@ -12,7 +12,7 @@ function Home() {
 
     const dispatch = useDispatch();
     const { userData } = useSelector(state => state.user)
-    console.log(userData);
+    // console.log(userData);
 
     const handleLogin = async (token) => {
         try {
