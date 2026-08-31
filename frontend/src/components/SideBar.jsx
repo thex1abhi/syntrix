@@ -127,7 +127,8 @@ function Sidebar() {
           {conversations.map((conv, i) => {
             const isActive = selectedConversation?._id == conv?._id
             return (
-              <div
+              <div 
+              key={i}
                 onClick={() => dispatch(setSelectedConversation(conv))}
                 className={`  flex items-center gap-2.5 cursor-pointer mb-0.5 px-3 py-2.5 
               rounded-[10px]  border transition-colors  duration-150
