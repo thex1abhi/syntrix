@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import sendMessage from "../features/sendMessage";
 import { useDispatch, useSelector } from "react-redux";
 import { addMessage, setMessages } from "../redux/messageSlice";
+import { createConversation } from "../features/createConversation";
+import { addConversation, setConvTitle, setSelectedConversation } from "../redux/conversationSlice";
+import { updateConversation } from "../features/updateConversation";
 
 function ChatInput() {
   const [value, setValue] = useState("");
@@ -11,8 +14,22 @@ function ChatInput() {
   // const { messages } = useSelector(state => state.message)
   const dispatch = useDispatch();
   const handleSendMessage = async () => {
+    let conversation = selectedConversation
+    if (!conversation) {
+      const conv = await createConversation()
+      dispatch(setSelectedConversation(conv))
+      dispatch(addConversation(conv))
+      conversation = conv
+    }
+
+    if (conversation.title == "New Chat") {
+      await updateConversation({ id: conversation?._id, title: value.trim() })
+      dispatch(setConvTitle({ conversationId: conversation._id, title: prompt.trim() }))
+    }
+
+
     const payload = {
-      prompt: value.trim(), conversationId: selectedConversation?._id
+      prompt: value.trim(), conversationId: conversation?._id
     }
 
     dispatch(addMessage({ role: "user", content: value.trim() }))
@@ -20,7 +37,7 @@ function ChatInput() {
     const data = await sendMessage(payload)
     dispatch(addMessage({ role: "assistant", content: data }))
     console.log(data);
-  } 
+  }
 
   return (
     <div className="w-full overflow-hidden px-3 py-4 border-t md:px-5  border-white/[0.06] 
