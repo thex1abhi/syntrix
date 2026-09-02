@@ -64,7 +64,7 @@ Generate image ,
         ...state,
         agent: response.content
             .trim()
-            .tolowerCase()
+            .toLowerCase()
     }
 
 }

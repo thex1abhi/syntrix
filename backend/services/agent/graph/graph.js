@@ -25,7 +25,7 @@ workflow.addConditionalEdges("router", (state) => {
         case "chat":
             return "chat";
         case "search":
-            return "searcg";
+            return "search";
         case "coding":
             return "coding";
         case "pdf":
@@ -36,7 +36,7 @@ workflow.addConditionalEdges("router", (state) => {
             return "vision";
 
         default:
-            return "chat ";
+            return "chat";
     }
 }, {
     chat: "chat",
