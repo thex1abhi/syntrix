@@ -7,7 +7,6 @@ import { addMessage, setMessages } from "../redux/messageSlice";
 import { createConversation } from "../features/createConversation";
 import { addConversation, setConvTitle, setSelectedConversation } from "../redux/conversationSlice";
 import { updateConversation } from "../features/updateConversation";
-import { agent } from "../../../backend/services/agent/controllers/agent.controller";
 
 function ChatInput() {
   const [value, setValue] = useState("");

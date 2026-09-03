@@ -1,5 +1,5 @@
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages"
-import { getModel } from "../config/llmmodel.js"
+import { getModel } from "../config/llmModel.js"
 import { getMemory } from "../config/memory.js"
 
 export const chatAgent = async (state) => {
@@ -7,6 +7,9 @@ export const chatAgent = async (state) => {
 
     const llm = await getModel("chat")
     const history = await getMemory(state.conversationId)
+
+    const searchContext = state.searchResults ? `Web search Results: ${state.searchResults}
+    Answer the user only the above search results   `: ""
 
     const systemPrompt = `You are syntrix AI , an intelligent AI assistance.
     Rules: 
