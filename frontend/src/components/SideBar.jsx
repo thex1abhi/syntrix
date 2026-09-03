@@ -37,8 +37,9 @@ function Sidebar() {
           <PanelRight size={15} />
         </button>
         <button
-          onClick={handleCreateConversation}
-          className=" flex items-center justify-center w-9 h-9 rounded-xl  text-slate-500  hover:bg-white/[0.05] hover:text-slate-200  transition-colors bg-transparent border-none cursor-pointer   ">
+          className=" flex items-center justify-center w-9 h-9 rounded-xl  text-slate-500  hover:bg-white/[0.05] hover:text-slate-200  transition-colors bg-transparent border-none cursor-pointer   "
+          onClick={() => dispatch(setSelectedConversation(null))}
+        >
           <Plus size={17} />   </button>
 
         <div className="flex-1 overflow-y-auto px-2.5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pt-5   ">
@@ -61,21 +62,21 @@ function Sidebar() {
           })}
         </div>
 
-  <div className="relative shrink-0  ">
-                {
-                  (userData?.avatar && !imageError)
-                    ?
-                    <img
-                      className="w-9 h-9 rounded-[10px] object-cover border-2 border-indigo-500/25  "
-                      src={userData?.avatar} alt="image"
-                      onError={() => setImageError(true)} />
-                    :
-                    <div className="w-9 h-9  rounded-[10px]  bg-white/[0.06] flex items-center 
+        <div className="relative shrink-0  ">
+          {
+            (userData?.avatar && !imageError)
+              ?
+              <img
+                className="w-9 h-9 rounded-[10px] object-cover border-2 border-indigo-500/25  "
+                src={userData?.avatar} alt="image"
+                onError={() => setImageError(true)} />
+              :
+              <div className="w-9 h-9  rounded-[10px]  bg-white/[0.06] flex items-center 
                      justify-center ">
-                      <User size={15} className="text-slate-400" />
-                    </div>
-                }
+                <User size={15} className="text-slate-400" />
               </div>
+          }
+        </div>
 
 
       </div>
@@ -98,7 +99,7 @@ function Sidebar() {
            border border-indigo-500/20 px-2 py-0.5  rounded-full  tracking-wide    ">
             free </span>
           <button
-            onClick={handleCreateConversation}
+            onClick={() => dispatch(setSelectedConversation(null))}
             className="flex items-center justify-center w-7 h-7 rounded-lg text-slate-500 hover:text-slate-200  hover:bg-white/[0.05] transition-colors duration-150  bg-transparent border-none cursor-pointer     ">
             <PenSquare size={14} />
           </button>
@@ -106,7 +107,7 @@ function Sidebar() {
 
         <div className="px-4 pt-4 pb-1 ">
           <button
-            onClick={handleCreateConversation}
+            onClick={() => dispatch(setSelectedConversation(null))}
             className="w-full flex items-center justify-center gap-2 text-sm  font-medium  text-white bg-linear-to-br from-indigo-500 to-violet-700 rounded-xl py-[10px] border-none cursor-pointer hover:opacity-90 transition-opacity duration-150">
             <Plus size={15} />   New Chat   </button>
         </div>
@@ -127,8 +128,8 @@ function Sidebar() {
           {conversations.map((conv, i) => {
             const isActive = selectedConversation?._id == conv?._id
             return (
-              <div 
-              key={i}
+              <div
+                key={i}
                 onClick={() => dispatch(setSelectedConversation(conv))}
                 className={`  flex items-center gap-2.5 cursor-pointer mb-0.5 px-3 py-2.5 
               rounded-[10px]  border transition-colors  duration-150

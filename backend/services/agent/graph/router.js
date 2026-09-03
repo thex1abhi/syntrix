@@ -1,7 +1,17 @@
 import { getModel } from "../config/llmmodel.js"
 
 export const router = async (state) => {
-    const llm =  await  getModel("router")
+
+
+    if (state.agent && state.agent !== "auto") {
+        return {
+            ...state,
+            agent: state.agent
+        }
+    }
+
+
+    const llm = await getModel("router")
     const prompt = `You are an agent router 
      
      Available agents  : 
@@ -58,7 +68,6 @@ Generate image ,
      `
 
     const response = await llm.invoke(prompt)
-    console.log(response);
 
     return {
         ...state,
