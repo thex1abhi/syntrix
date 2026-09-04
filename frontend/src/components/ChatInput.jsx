@@ -36,8 +36,8 @@ function ChatInput() {
     dispatch(addMessage({ role: "user", content: value.trim() }))
     setValue("")
     const data = await sendMessage(payload)
-    dispatch(addMessage({ role: "assistant", content: data }))
-    // console.log(data);
+    dispatch(addMessage({ role: "assistant", content: data.answer, images: data.images }))
+    console.log(data);
   }
 
   const agents = [
@@ -84,11 +84,12 @@ function ChatInput() {
       <div className="flex flex-col gap-2 bg-white/[0.03] border border-white/[0.07] rounded-2xl 
       px-4 pt-3.5 pb-3  ">
         <div className="flex w-[80%] gap-2 pr-2 flex-wrap ">
-          {agents.map((agent) => {
+          {agents.map((agent,i) => {
             const isActive = selectedAgent === agent.label
             const Icon = agent.icon
 
             return (<div
+            key={i}
               onClick={() => setSelectedAgent(agent.label)}
               className={` flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-full 
               text-xs font-medium border transition-all  cursor-pointer ${isActive ?

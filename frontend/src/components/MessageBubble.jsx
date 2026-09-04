@@ -2,7 +2,7 @@
 import React from "react";
 import MarkDown from "react-markdown"
 
-function MessageBubble({ role, content }) {
+function MessageBubble({ role, content, images }) {
 
     const isUser = role === "user"
 
@@ -10,11 +10,23 @@ function MessageBubble({ role, content }) {
         <>
             <div className={` flex  ${isUser ? "justify-end" : "justify-start"} `} >
 
-                <div className={` max-w-[72%] px-4 py-2.5 rounded-2xl text-[13.5px] leading-relaxed    ${isUser ? "bg-gradient-to-br from-indigo-500  to-violet-700 text-white  rounded-tr-sm  " : " bg-white/[0.04] border border-white/[0.07]  text-slate-200 rounded-tl-sm   "}  `}>
+                <div className={` w-fit max-w-[92vw]  md:max-w-[72%] px-4 py-2.5 rounded-2xl 
+                    break-words overflow-hidden leading-relaxed  ${isUser ? "bg-gradient-to-br from-indigo-500  to-violet-700 text-white  rounded-tr-sm  " : "   text-slate-200 rounded-tl-sm   "}  `}>
+
+                    {images.length > 0 && (
+                        <div className="flex flex-wrap gap-3 mt-4 ">
+                            {images.map((img, i) => (
+                                <img key={i}
+                                    loading="lazy" 
+                                    src={img} alt="" className="" />
+                            ))}
+                        </div>
+                    )}
+
                     <MarkDown>
                         {content}
                     </MarkDown>
-                </div>  
+                </div>
             </div>
         </>
     )

@@ -21,9 +21,9 @@ function MessageList() {
                         </div>
                         <div className="flex flex-wrap justify-center gap-2 mt-1  ">
                             {["Build", "Explain", "Code"].map((s) => (
-                                <button 
-                                key={s}
-                                className=" text-[12px] text-slate-400 bg-white/[0.04 ] border border-white/[0.07] px-3 py-1.5  rounded-lg hover:bg-white/[0.08] hover:text-slate-200 transition-colors duration-150 cursor-pointer ">
+                                <button
+                                    key={s}
+                                    className=" text-[12px] text-slate-400 bg-white/[0.04 ] border border-white/[0.07] px-3 py-1.5  rounded-lg hover:bg-white/[0.08] hover:text-slate-200 transition-colors duration-150 cursor-pointer ">
                                     {s}
                                 </button>
                             ))}
@@ -32,10 +32,11 @@ function MessageList() {
                 ) :
                     <div>
                         {messages.map((msg, i) => (
-                            <div
+                            <div 
                                 key={i}
-                                className="">
-                                <MessageBubble role={msg?.role} content={msg?.content} />
+                                className="space-y-5">
+                                <MessageBubble role={msg?.role} content={msg?.content}
+                                    images={msg.images || []} />
                             </div>
                         ))}
 

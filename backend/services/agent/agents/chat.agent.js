@@ -8,10 +8,16 @@ export const chatAgent = async (state) => {
     const llm = await getModel("chat")
     const history = await getMemory(state.conversationId)
 
-    const searchContext = state.searchResults ? `Web search Results: ${state.searchResults}
+    const searchContext = state.searchResults ? `Web search Results: ${JSON.stringify(state.searchResults)}
     Answer the user only the above search results   `: ""
 
-    const systemPrompt = `You are syntrix AI , an intelligent AI assistance.
+    const systemPrompt = `You are syntrix AI , an intelligent AI assistance. 
+    ${searchContext}
+
+    If searchContext exists : 
+    -Use search results to answer 
+    -Do not mention internal tools 
+
     Rules: 
     -For simple questions , greetings, and short queries , respond naturally in plain text.
     -For technical , educational , coding  , or detailed topics , use clean Markdown .
