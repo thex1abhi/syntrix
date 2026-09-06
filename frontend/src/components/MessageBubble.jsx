@@ -1,13 +1,25 @@
 
 import React, { useState } from "react";
 import MarkDown from "react-markdown"
-import { X } from "lucide-react"
+import { Check, Copy, ExternalLink, X } from "lucide-react"
 import remarkGfm from 'remark-gfm'
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 function MessageBubble({ role, content, images }) {
 
     const isUser = role === "user"
     const [lightBox, setLightBox] = useState(null);
+    const [copiedCode, setCopiedCode] = useState("");
+
+    const copyCode = async (code) => {
+        await navigator.clipboard.writeText(code)
+        setCopiedCode(code)
+        setTimeout(() => {
+            setCopiedCode("")
+        }, 2000);
+    }
 
     return (
         <>
@@ -45,7 +57,84 @@ function MessageBubble({ role, content, images }) {
                             ul: ({ children }) => (
                                 <ul className=" list-disc pl-5 space-y-1  my-2   " > {children} </ul>
                             ),
+                            ol: ({ children }) => (
+                                <ol className=" list-decimal pl-5 space-y-1  my-2   " > {children}
+                                </ol>
+                            ),
+                            table: ({ children }) => (
+                                <div className="overflow-x-auto my-4  ">
+                                    <table className="min-w-full  border border-white/10  ">
+                                        {children}
+                                    </table>
+                                </div>
+                            ),
+                            th: ({ children }) => (
+                                <th className=" border border-white/10  bg-white/5 px-3 py-2 text-left ">
+                                    {children}
+                                </th>
+                            ),
+                            td: ({ children }) => (
+                                <td className=" border border-white/10   px-3 py-2 ">
+                                    {children}
+                                </td>
+                            ),
+                            a: ({ href, children }) => (
+                                <a href={href}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-indigo-400 underline inline-flex items-center gap-1  "
+                                >
+                                    {children}
+                                    <ExternalLink size={14} />
+                                </a>
+                            ),
+                            code: ({ className, children }) => {
+                                const value = String(children).trim()
+                                if (!className) {
+                                    return (
+                                        <code className=" px-1.5 py-0.5 rounded bg-white/10 text-indigo-200 ">{value}</code>
+                                    )
+                                }
+                                const language = className?.replace("language-", "")
+                                return (
+                                    <div className="my-4 overflow-hidden rounded-xl border border-white/10  bg-[#111318] ">
+                                        <div className="flex items-center justify-between bg-[#1b1d24] border-b border-white/10 px-4 py-2   ">
+                                            <span className="uppercase text-xs text-slate-400 ">
+                                                {language}
+                                            </span>
+                                            <button
+                                                className="flex items-center  gap-1 text-xs  "
+                                                onClick={() => copyCode(value)} >
+                                                {
+                                                    copiedCode === value ?
+                                                        <>
+                                                            <Check size={14} />
+                                                            Copied </>
+                                                        : <>
+                                                            <Copy size={14} />
+                                                            Copy
+                                                        </>
+                                                }
+                                            </button>
+                                        </div>
+                                        <SyntaxHighlighter
+                                            language={language}
+                                            style={oneDark}
+                                            wrapLongLines
+                                            showLineNumbers
+                                            customStyle={{
+                                                margin: 0,
+                                                padding: "16px",
+                                                background: "#0d1117",
+                                                fontSize: "13px"
+                                            }}  >
+                                            {value}
+                                        </SyntaxHighlighter>
 
+
+                                    </div>
+                                )
+                            }
 
                         }}
                     >
