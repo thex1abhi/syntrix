@@ -1,4 +1,4 @@
-import { getModel } from "../config/llmModel.js"
+import { getModel } from "../config/llmmodel.js"
 
 export const codingAgent = async (state) => {
     const intentLlm = await getModel("intent")
@@ -45,6 +45,11 @@ Rules:
 -Beautiful spacing 
 -Single page unless user asks otherwise 
 
+Images : 
+Always  use real unsplash images . 
+Never use placeholders.
+Return only valid JSON
+
 Return only valid JSON .
 
 Schema  : 
@@ -81,6 +86,8 @@ User Request :
 
         const res = await llm.invoke(prompt)
         const data = JSON.parse(res.content)
+        console.log(res);
+
         return {
             ...state,
             aiResponse: "Code generated successfully.",
