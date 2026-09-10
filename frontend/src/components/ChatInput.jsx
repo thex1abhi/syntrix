@@ -67,9 +67,9 @@ function ChatInput() {
       icon: Presentation,
       label: "PPT"
     }, {
-      id: "image",
+      id: "vision",
       icon: ImageIcon,
-      label: "Image"
+      label: "vision"
     },
     {
       id: "search",

@@ -1,4 +1,5 @@
-import { getModel } from "../config/llmmodel.js"
+import { getModel } from "../config/llmModel.js"
+
 
 export const codingAgent = async (state) => {
     const intentLlm = await getModel("intent")
