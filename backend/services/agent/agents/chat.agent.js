@@ -4,14 +4,14 @@ import { getMemory } from "../config/memory.js"
 
 export const chatAgent = async (state) => {
 
+    try {
+        const llm = await getModel("chat")
+        const history = await getMemory(state.conversationId)
 
-    const llm = await getModel("chat")
-    const history = await getMemory(state.conversationId)
-
-    const searchContext = state.searchResults ? `Web search Results: ${JSON.stringify(state.searchResults)}
+        const searchContext = state.searchResults ? `Web search Results: ${JSON.stringify(state.searchResults)}
     Answer the user only the above search results   `: ""
 
-    const systemPrompt = `You are syntrix AI , an intelligent AI assistance. 
+        const systemPrompt = `You are syntrix AI , an intelligent AI assistance. 
     ${searchContext}
 
     If searchContext exists : 
@@ -33,25 +33,32 @@ export const chatAgent = async (state) => {
     - Never generate large walls of text. 
      `
 
-    const messages = [
-        new SystemMessage(systemPrompt)
-    ]
+        const messages = [
+            new SystemMessage(systemPrompt)
+        ]
 
-    history.forEach(msg => {
-        if (msg.role == "user") {
-            messages.push(new HumanMessage(msg.content))
+        history.forEach(msg => {
+            if (msg.role == "user") {
+                messages.push(new HumanMessage(msg.content))
+            }
+            if (msg.role == "assistant") {
+                messages.push(new AIMessage(msg.content))
+            }
+        });
+
+        messages.push(new HumanMessage(state.prompt))
+
+
+        const response = await llm.invoke(messages)
+        return {
+            ...state,
+            aiResponse: response.content
         }
-        if (msg.role == "assistant") {
-            messages.push(new AIMessage(msg.content))
+    } catch (error) {
+        return {
+            ...state,
+            aiResponse: " failed to generate response   "
         }
-    });
-
-    messages.push(new HumanMessage(state.prompt))
-
-
-    const response = await llm.invoke(messages)
-    return {
-        ...state,
-        aiResponse: response.content
     }
+
 }

@@ -1,10 +1,14 @@
 import { getModel } from "../config/llmModel.js"
 import axios from "axios"
+import { getFromS3 } from "../utils/getFromS3.js"
+import { uploadToS3 } from "../utils/uploadToS3.js"
 
 export const visionAgent = async (state) => {
-    const llm = await getModel("image")
 
-    const res = await llm.invoke(` 
+    try {
+        const llm = await getModel("image")
+
+        const res = await llm.invoke(` 
         You are an elite AI image prompt engineeer 
         
         convert the user request into a highly detailed imamge generation prompt.
@@ -28,12 +32,31 @@ export const visionAgent = async (state) => {
         ${state.prompt}
         `)
 
-    const prompt = res.content.trim()
+        const prompt = res.content.trim()
 
-    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`
-    const imageRes = await axios.get(imageUrl, { responseType: "arraybuffer" })
-    const buffer = Buffer.from(imageRes.data)
-    const filename = `${Date.now()}.png`
+        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`
+        const imageRes = await axios.get(imageUrl, { responseType: "arraybuffer" })
+        const buffer = Buffer.from(imageRes.data)
+        const filename = `image-${Date.now()}.png`
 
-    await uploadToS3(filename, buffer, "image/png")
+        await uploadToS3(filename, buffer, "image/png")
+        const downloadUrl = await getFromS3(filename, 24 * 60 * 60,)
+        return {
+            ...state,
+            aiResponse: `# ✔ Image Generated Successfully
+
+![Generated Image](${downloadUrl})
+
+[Download Image](${downloadUrl})
+
+Link expires in 10 minutes.`
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            ...state,
+            aiResponse: " ❌ failed to generate image  "
+        }
+    }
+
 }

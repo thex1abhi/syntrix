@@ -5,7 +5,6 @@ import { Check, Copy, ExternalLink, X } from "lucide-react"
 import remarkGfm from 'remark-gfm'
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 function MessageBubble({ role, content, images }) {
 
@@ -134,7 +133,21 @@ function MessageBubble({ role, content, images }) {
 
                                     </div>
                                 )
+                            },
+
+                            img: ({ src }) => {
+                                if (!src) return null;
+                                return (
+                                    <img
+                                        loading="lazy"
+                                        onClick={() => setLightBox(src)}
+                                        onError={(e) => e.currentTarget.remove()}
+                                        src={src} alt={"img-error"}
+                                        className="w-40 h-28 rounded-xl object-cover border border-white/10 cursor-zoom-in hover:opacity-90 transition " />
+                                )
+
                             }
+
 
                         }}
                     >
