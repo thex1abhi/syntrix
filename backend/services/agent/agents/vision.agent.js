@@ -52,7 +52,7 @@ export const visionAgent = async (state) => {
 ⏳ Link expires in 10 minutes.`
         };
     } catch (error) {
-        console.log(error);
+        
         return {
             ...state,
             aiResponse: " ❌ failed to generate image  "

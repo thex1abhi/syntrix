@@ -52,12 +52,12 @@ export const chatAgent = async (state) => {
         const response = await llm.invoke(messages)
         return {
             ...state,
-            aiResponse: response.content
+            aiResponse: response?.content
         }
     } catch (error) {
         return {
             ...state,
-            aiResponse: " failed to generate response   "
+            aiResponse: " Failed to generate response   "
         }
     }
 

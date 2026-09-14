@@ -7,14 +7,14 @@ export const searchAgent = async (state) => {
             query: state.prompt
         })
 
-        console.log(results);
+        
         return {
             ...state,
             searchResults: results,
             images: results.images
         }
     } catch (error) {
-        console.log(error);
+    
         return {
             ...state,
             searchResults: [],
