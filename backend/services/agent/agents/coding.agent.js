@@ -87,7 +87,7 @@ User Request :
 
         const res = await llm.invoke(prompt)
         const data = JSON.parse(res.content)
-        console.log(res);
+        
 
         return {
             ...state,
