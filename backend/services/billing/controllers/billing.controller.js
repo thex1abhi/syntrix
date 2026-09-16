@@ -7,7 +7,7 @@ import axios from "axios"
 export const createOrder = async (req, res) => {
     try {
         const userId = req.headers["x-user-id"]
-        const plan = req.body
+        const { plan } = req.body
         const selectedPlan = PLANS[plan]
 
         if (!selectedPlan) {
@@ -44,7 +44,7 @@ export const verifyPayment = async (req, res) => {
 
         const genrateSignature = crypto
             .createHmac("sha256", process.env.RAZORPAY_SECRET_ID)
-            .update(` ${razorpay_order_id} | ${razorpay_payment_id} `)
+            .update(`${razorpay_order_id}|${razorpay_payment_id}`)
             .digest("hex")
 
         if (genrateSignature !== razorpay_signature) {
@@ -63,11 +63,12 @@ export const verifyPayment = async (req, res) => {
 
         await payment.save()
 
-        await axios.post(`${process.env.AUTH_SERVICE}/update-plan `, {
+        const { data } = await axios.post(`${process.env.AUTH_SERVICE}/update-plan`, {
             userId: payment.userId,
             plan: payment.plan,
             credits: payment.credits
         })
+        console.log(data);
 
         return res.status(200).json({ message: `Payment verified` })
 
