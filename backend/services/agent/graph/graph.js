@@ -53,7 +53,7 @@ workflow.addConditionalEdges("router", (state) => {
     pdf: "pdf",
     ppt: "ppt",
     vision: "vision",
-    pdfRage: "pdfRag",
+    pdfRag: "pdfRag",
     imageAnalyzer: "imageAnalyzer"
 })
 

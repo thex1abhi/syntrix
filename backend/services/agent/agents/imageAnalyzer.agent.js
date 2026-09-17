@@ -1,12 +1,12 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages"
 import { getModel } from "../config/llmmodel.js"
-import fs from "fs"
+import fs from "fs/promises"
 import { deductCredtis } from "../utils/deductCredits.js"
 
 export const imageAnalyzer = async (state) => {
     try {
 
-        const llm = getModel("imageAnalyzer")
+        const llm = await  getModel("imageAnalyzer")
         const imageBuffer = await fs.readFile(state.file.path)
         const base64Image = imageBuffer.toString("base64")
 
@@ -40,22 +40,23 @@ export const imageAnalyzer = async (state) => {
                 })]
 
         const response = await llm.invoke(messages)
+        console.log("imgANA response  : ", response?.content);
         await deductCredtis(state.userId, "vision")
 
         return {
             ...state,
-            aiResponse: response.content
+            aiResponse: response?.content
         }
 
     } catch (error) {
-        console.log(error);
+        console.log("ImgAnaError :", error);
         return {
             ...state,
             aiResponse: "Failed to analyze file "
         }
     }
     finally {
-        fs.unlink(state.file.path)
+        await fs.unlink(state.file.path)
     }
 }
 

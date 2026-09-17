@@ -12,7 +12,7 @@ const groq = new ChatGroq({
 
 const gemini = new ChatGoogleGenerativeAI({
     //gemini key is from abhishek84
-    model: "gemini-2.5-flash",
+    model: "gemini-3.6-flash",
 })
 
 const openrouter = new ChatOpenRouter({
