@@ -40,7 +40,6 @@ export const imageAnalyzer = async (state) => {
                 })]
 
         const response = await llm.invoke(messages)
-        console.log("imgANA response  : ", response?.content);
         await deductCredtis(state.userId, "vision")
 
         return {
@@ -49,7 +48,6 @@ export const imageAnalyzer = async (state) => {
         }
 
     } catch (error) {
-        console.log("ImgAnaError :", error);
         return {
             ...state,
             aiResponse: "Failed to analyze file "

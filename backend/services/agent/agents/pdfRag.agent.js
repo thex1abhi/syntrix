@@ -13,8 +13,8 @@ export const pdfRag = async (state) => {
             data: buffer
         })
 
-        const result = pdf.getText()
-        const text = await result.text
+        const result = await pdf.getText()
+        const text = result.text
         const spilliter = new RecursiveCharacterTextSplitter({
             chunkSize: 1000,
             chunkOverlap: 200,
@@ -28,7 +28,7 @@ export const pdfRag = async (state) => {
 
         const relevantDocs = await store.similaritySearch(state.prompt, 5)
 
-        const context = relevantDocs.map(d => d.pageContent).join("/n/n")
+        const context = relevantDocs.map(d => d.pageContent).join("\n\n")
 
         const llm = await getModel("pdf-rag")
 
@@ -51,7 +51,9 @@ export const pdfRag = async (state) => {
             )
         ]
 
-        const response = llm.invoke(messages)
+        const response = await llm.invoke(messages)
+        
+
         await deductCredtis(state.userId, "pdf")
         return {
             ...state,
@@ -59,7 +61,7 @@ export const pdfRag = async (state) => {
         }
 
     } catch (error) {
-        console.log(error);
+        
         return {
             ...state,
             aiResponse: "Failed to analyze pdf "
