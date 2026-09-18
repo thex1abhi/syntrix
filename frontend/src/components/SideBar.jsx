@@ -124,11 +124,11 @@ function Sidebar() {
               onClick={() => setMobileOpen(false)}
               className="lg:hidden  flex items-center justify-center w-7 h-7  rounded-lg text-slate-500 hover:text-slate-200 hover:bg-white/[0.05] transition-colors duration-150  bg-transparent border-none  cursor-pointer  ">
               <X />
-            </button> 
+            </button>
             <span className="text-[16px]  font-semibold  text-slate-100  tracking-tight flex-1    ">    SyntrixAI </span>
             <span className="text-[10px]  font-medium  text-indigo-400 bg-indigo-500/10
            border border-indigo-500/20 px-2 py-0.5  rounded-full  tracking-wide    ">
-              free </span>
+              {userData?.plan || "free plan "} </span>
             <button
               onClick={() => dispatch(setSelectedConversation(null))}
               className="flex items-center justify-center w-7 h-7 rounded-lg text-slate-500 hover:text-slate-200  hover:bg-white/[0.05] transition-colors duration-150  bg-transparent border-none cursor-pointer     ">
@@ -202,7 +202,7 @@ function Sidebar() {
                 </div>
                 <div className="flex-1 min-w-0 ">
                   <p className=" text-[13.5px] font-semibold text-slate-100 truncate   "> {userData?.name || " user"}  </p>
-                  <p className="text-[11px] text-slate-600 mt-px  "> free plan   </p>
+                  <p className="text-[11px] text-slate-600 mt-px  "> {userData?.plan || "free plan "}  </p>
                 </div>
                 <div className="flex gap-1">
                   <button
@@ -229,11 +229,11 @@ function Sidebar() {
             }
           </div>
         </div>
-      </div > 
+      </div >
       <BillingDrawer
-          open={showBilling}
-          onClose={() => setShowBilling(false)}
-        />
+        open={showBilling}
+        onClose={() => setShowBilling(false)}
+      />
     </>
   )
 

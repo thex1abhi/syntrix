@@ -3,7 +3,7 @@ import { Code2, FileText, Globe, ImageIcon, MessageSquare, Mic, Paperclip, Prese
 import React, { useState } from "react";
 import sendMessage from "../features/sendMessage";
 import { useDispatch, useSelector } from "react-redux";
-import { addMessage, setArtifacts } from "../redux/messageSlice";
+import { addMessage, setArtifacts, setIsLoading } from "../redux/messageSlice";
 import { createConversation } from "../features/createConversation";
 import { addConversation, setConvTitle, setSelectedConversation } from "../redux/conversationSlice";
 import { updateConversation } from "../features/updateConversation";
@@ -18,6 +18,7 @@ function ChatInput() {
   // const { messages } = useSelector(state => state.message)
   const dispatch = useDispatch();
   const handleSendMessage = async () => {
+    dispatch(setIsLoading(true))
     let conversation = selectedConversation
     if (!conversation) {
       const conv = await createConversation()
@@ -36,11 +37,14 @@ function ChatInput() {
     formData.append("prompt", value.trim())
     formData.append("conversationId", conversation?._id)
     formData.append("agent", selectedAgent.toLowerCase())
-    formData.append("file", selectedFile)
+    if (selectedFile) {
+      formData.append("file", selectedFile)
+    }
 
     dispatch(addMessage({ role: "user", content: value.trim() }))
     setValue("")
     const data = await sendMessage(formData)
+    dispatch(setIsLoading(false))
     setSelectedFile(null)
     dispatch(setArtifacts(data?.artifacts || []))
     dispatch(addMessage({ role: "assistant", content: data?.answer, images: data?.images }))

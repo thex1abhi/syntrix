@@ -1,12 +1,24 @@
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import MessageBubble from "./MessageBubble";
+import LoadingAnimation from "./LoadingAnimation";
+
 
 function MessageList() {
 
     const { selectedConversation } = useSelector(state => state.conversation)
-    const { messages } = useSelector(state => state.message)
+    const { messages, isLoading } = useSelector(state => state.message)
+    const bottomRef = useRef(null)
+
+    useEffect(() => {
+        requestAnimationFrame(() => {
+            bottomRef?.current.scrollIntoView({
+                behaviour: "smooth",
+                block: "end"
+            })
+        })
+    }, [messages.length, isLoading])
 
     return (
         <>
@@ -32,16 +44,18 @@ function MessageList() {
                 ) :
                     <div>
                         {messages.map((msg, i) => (
-                            <div 
+                            <div
                                 key={i}
                                 className="space-y-5">
                                 <MessageBubble role={msg?.role} content={msg?.content}
                                     images={msg.images || []} />
                             </div>
                         ))}
+                        {isLoading && <LoadingAnimation />}
 
                     </div>
                 }
+                <div ref={bottomRef} />
             </div>
         </>
     )
