@@ -6,6 +6,7 @@ import { uploadToS3 } from "../utils/uploadToS3.js";
 
 export const pdfAgent = async (state) => {
     try {
+        await CheckAgentLimit(state.userId, "pdf")
         const llm = await getModel("pdf")
         const prompt = ` 
         You are an expert document writer.
@@ -59,7 +60,7 @@ export const pdfAgent = async (state) => {
 
         return {
             ...state,
-            aiResponse: "  Failed to generate pdf "
+            aiResponse:  error?.data?.message || "  Failed to generate pdf "
         }
     }
 }

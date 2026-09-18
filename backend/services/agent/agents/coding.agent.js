@@ -1,12 +1,15 @@
+import { CheckAgentLimit } from "../config/agentLimits.js"
 import { getModel } from "../config/llmmodel.js"
 import { deductCredtis } from "../utils/deductCredits.js"
 
 
 export const codingAgent = async (state) => {
 
-    const intentLlm = await getModel("intent")
-    const llm = await getModel("coding")
-    const intentRes = await intentLlm.invoke(`
+    try {
+        await CheckAgentLimit(state.userId, "coding")
+        const intentLlm = await getModel("intent")
+        const llm = await getModel("coding")
+        const intentRes = await intentLlm.invoke(`
         You are a intent classifier 
         
         Return ONLY one of these values.
@@ -23,10 +26,10 @@ export const codingAgent = async (state) => {
         ${state.prompt}
         `)
 
-    const intent = intentRes.content
+        const intent = intentRes.content
 
-    if (intent == "CODE_GENERATION") {
-        const prompt = ` 
+        if (intent == "CODE_GENERATION") {
+            const prompt = ` 
         You are SyntrixAI Coding Agent.
 
 Generate the requested project 
@@ -87,26 +90,26 @@ User Request :
    `
 
 
-        const res = await llm.invoke(prompt)
-        const data = JSON.parse(res.content)
-        await deductCredtis(state.userId, "coding")
+            const res = await llm.invoke(prompt)
+            const data = JSON.parse(res.content)
+            await deductCredtis(state.userId, "coding")
 
-        return {
-            ...state,
-            aiResponse: "Code generated successfully.",
-            artifacts: [
-                {
-                    id: Date.now(),
-                    type: "Project",
-                    files: data.files || [],
-                    title: state.prompt,
-                }
-            ]
+            return {
+                ...state,
+                aiResponse: "Code generated successfully.",
+                artifacts: [
+                    {
+                        id: Date.now(),
+                        type: "Project",
+                        files: data.files || [],
+                        title: state.prompt,
+                    }
+                ]
 
+            }
         }
-    }
 
-    const res = await llm.invoke(`
+        const res = await llm.invoke(`
         The user's request is : 
         ${intent}
 
@@ -130,11 +133,19 @@ User Request :
         ${state.prompt}
         `)
 
-    const data = res.content
-    await deductCredtis(state.userId, "coding")
-    return {
-        ...state,
-        aiResponse: data,
-        artifacts: []
+        const data = res.content
+        await deductCredtis(state.userId, "coding")
+        return {
+            ...state,
+            aiResponse: data,
+            artifacts: []
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            ...state,
+            aiResponse: error?.data?.message || "Failed to generate code ",
+            artifacts: []
+        }
     }
 } 

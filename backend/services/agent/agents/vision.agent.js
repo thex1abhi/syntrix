@@ -3,10 +3,12 @@ import axios from "axios"
 import { getFromS3 } from "../utils/getFromS3.js"
 import { uploadToS3 } from "../utils/uploadToS3.js"
 import { deductCredtis } from "../utils/deductCredits.js"
+import { CheckAgentLimit } from "../config/agentLimits.js"
 
 export const visionAgent = async (state) => {
 
     try {
+        await CheckAgentLimit(state.userId, "image")
         const llm = await getModel("image")
 
         const res = await llm.invoke(` 
@@ -58,7 +60,7 @@ export const visionAgent = async (state) => {
 
         return {
             ...state,
-            aiResponse: " ❌ failed to generate image  "
+            aiResponse: error?.data?.message || " ❌ failed to generate image  "
         }
     }
 
