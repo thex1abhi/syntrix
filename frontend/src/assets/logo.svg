@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Syntrix AI favicon">
+  <defs>
+    <linearGradient id="syntrix" x1="90" y1="70" x2="420" y2="450" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#38BDF8"/>
+      <stop offset="0.48" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#A855F7"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="#030712"/>
+
+  <!-- Futuristic ribbon S -->
+  <path
+    d="M105 157
+       Q105 139 121 130
+       L277 48
+       L407 121
+       L219 220
+       L407 325
+       Q421 333 421 350
+       Q421 369 405 378
+       L247 464
+       L105 383
+       L293 283
+       L105 178
+       Q105 169 105 157Z"
+    fill="url(#syntrix)"/>
+
+  <!-- Inner cut / separation -->
+  <path
+    d="M219 220 L407 121 L407 151 L276 221 L293 231 L293 283 L219 242 Z"
+    fill="#030712"
+    opacity=".18"/>
+</svg>
