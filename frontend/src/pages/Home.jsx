@@ -8,10 +8,13 @@ import { setUserdata } from "../redux/userSlice.js";
 import Sidebar from "../components/SideBar.jsx";
 import ChatArea from "../components/ChatArea.jsx";
 import Artifact from "../components/Artifact.jsx";
+import { X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 function Home() {
 
     const dispatch = useDispatch();
     const { userData } = useSelector(state => state.user)
+    const navigate = useNavigate();
     // console.log(userData);
 
     const handleLogin = async (token) => {
@@ -42,10 +45,24 @@ function Home() {
                  bg-black/60   backdrop-blur-sm ">
                     <div className="w-[340px] bg-[#13151c] border border-white/[0.08] 
                      rounded-2xl  p-7 flex flex-col  gap-5   ">
-                        <div className="">
-                            <h2 className=" text-[17px] font-semibold text-slate-100
-                        tracking-tight "> Welcome to Syntrix AI </h2>
-                            <p className="text-[13px] text-slate-500 ">Please login to continue   </p>
+
+                        <div className="flex items-start justify-between gap-1">
+                            <div className="flex-1">
+                                <h2 className="text-[17px] font-semibold tracking-tight text-slate-100">
+                                    Welcome to Syntrix AI
+                                </h2>
+                                <p className="mt-1 text-[13px] text-slate-500">
+                                    Please login to continue
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => navigate("/")}
+                                type="button"
+                                className=" cursor-pointer flex h-8 w-8 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-white/5 hover:text-white"
+
+                            >
+                                <X className="h-4 w-4" size={16} />
+                            </button>
                         </div>
 
                         <button
@@ -58,7 +75,7 @@ function Home() {
                     </div>
                 </div>}
 
-            </div>
+            </div >
         </>
     )
 }

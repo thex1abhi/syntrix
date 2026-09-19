@@ -1,27 +1,16 @@
-import { useEffect } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import getCurrentUser from "./features/getCurrentUser.js";
-import { useDispatch } from "react-redux";
-import { setUserdata } from "./redux/userSlice.js";
+import LandingPage from "./components/LandingPage.jsx";
 
 function App() {
 
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    const getUser = async () => {
-      const data = await getCurrentUser()
-       dispatch(setUserdata(data))
-    }
-    getUser()
-  }, [])
-
   return (
-
-    <>
-      <Home />
-    </>
-  )
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/chat" element={<Home />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
 }
 
 export default App;

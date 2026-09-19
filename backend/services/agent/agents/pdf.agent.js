@@ -1,3 +1,4 @@
+import { CheckAgentLimit } from "../config/agentLimits.js";
 import { getModel } from "../config/llmmodel.js";
 import { deductCredtis } from "../utils/deductCredits.js";
 import { generatePdf } from "../utils/generatePdf.js";
@@ -57,7 +58,7 @@ export const pdfAgent = async (state) => {
         }
 
     } catch (error) {
-
+  console.log(error)
         return {
             ...state,
             aiResponse:  error?.data?.message || "  Failed to generate pdf "
