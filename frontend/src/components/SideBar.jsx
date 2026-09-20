@@ -8,10 +8,11 @@ import { createConversation } from "../features/createConversation";
 import logout from "../features/logout";
 import { setUserdata } from "../redux/userSlice";
 import BillingDrawer from "./BillingDrawer";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { conversations, selectedConversation } = useSelector(state => state.conversation)
   const { userData } = useSelector(state => state.user)
@@ -213,7 +214,8 @@ function Sidebar() {
                   <button
                     onClick={() => {
                       logout(),
-                        dispatch(setUserdata(null))
+                        navigate("/")
+                      dispatch(setUserdata(null))
                     }}
                     className="flex items-center justify-center w-7 h-7 rounded-[7px] border-none  bg-transparent text-slate-600 cursor-pointer hover:bg-white/[0.08] hover:text-slate-400  transition-all duration-150 ">
                     <LogOut size={16} />
