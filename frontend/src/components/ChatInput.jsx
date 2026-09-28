@@ -1,6 +1,6 @@
 
 import { Code2, FileText, Globe, ImageIcon, MessageSquare, Mic, Paperclip, Presentation, Send, X, Zap } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import sendMessage from "../features/sendMessage";
 import { useDispatch, useSelector } from "react-redux";
 import { addMessage, setArtifacts, setIsLoading } from "../redux/messageSlice";
@@ -11,12 +11,32 @@ import { useRef } from "react";
 
 function ChatInput() {
   const [value, setValue] = useState("");
+  const [listening, setListening] = useState(false);
+  const recognitionRef = useRef(null);
+  const fileRef = useRef(null)
   const [selectedAgent, setSelectedAgent] = useState("Auto");
   const { selectedConversation } = useSelector(state => state.conversation)
-  const dispatch = useDispatch();
-  const [selectedFile, setSelectedFile] = useState(null);
-  const fileRef = useRef(null)
   const { messages, isLoading } = useSelector(state => state.message)
+  const [selectedFile, setSelectedFile] = useState(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) return;
+    const recognition = new SpeechRecognition()
+    recognition.lang=("en-us")
+    recognition.interimResults = true;
+    recognition.continuous = true;
+    recognition.onresult = (event) => {
+      console.log(event);
+
+    }
+    recognition.start()
+
+  }, []);
+
+
   const handleSendMessage = async () => {
     dispatch(setIsLoading(true))
     let conversation = selectedConversation
