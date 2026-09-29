@@ -1,5 +1,5 @@
 
-import { Code2, FileText, Globe, ImageIcon, MessageSquare, Mic, Paperclip, Presentation, Send, X, Zap } from "lucide-react";
+import { Code2, FileText, Globe, ImageIcon, MessageSquare, Mic, MicOff, Paperclip, Presentation, Send, X, Zap } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import sendMessage from "../features/sendMessage";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,17 +25,40 @@ function ChatInput() {
 
     if (!SpeechRecognition) return;
     const recognition = new SpeechRecognition()
-    recognition.lang=("en-us")
+    recognition.lang = "en-us"
     recognition.interimResults = true;
     recognition.continuous = true;
     recognition.onresult = (event) => {
       console.log(event);
-
+      let transcript = ""
+      for (let index = event.resultIndex; index < event.results.length; index++) {
+        transcript += event.results[index][0].transcript
+      }
+      setValue(transcript)
     }
-    recognition.start()
 
+
+    recognition.onend = () => {
+      setListening(false)
+    }
+
+    recognitionRef.current = recognition
   }, []);
 
+
+  const toggleMic = () => {
+    if (!recognitionRef.current) {
+      alert("Speech recognition is not supported ")
+    }
+
+    if (listening) {
+      recognitionRef.current.stop()
+      setListening(false)
+    } else {
+      recognitionRef.current.start()
+      setListening(true)
+    }
+  }
 
   const handleSendMessage = async () => {
     dispatch(setIsLoading(true))
@@ -188,9 +211,13 @@ function ChatInput() {
             hover:text-slate-400 hover:bg-white/[0.05] border border-transparent hover:border-white/[0.06] transition-all duration-150 bg-transparent cursor-pointer">
               <Paperclip size={16} />
             </button>
-            <button className="flex items-center justify-center w-8 h-8 rounded-lg text-slate-600
-            hover:text-slate-400 hover:bg-white/[0.05] border border-transparent hover:border-white/[0.06] transition-all duration-150 bg-transparent cursor-pointer">
-              <Mic size={16} />
+
+            <button
+              onClick={toggleMic}
+              className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-150  cursor-pointer  
+            ${listening ? "bg-red-500 text-white " : " text-slate-600 hover:bg-white/[0.05]"} `
+              }> 
+              {listening ? <Mic size={16} /> : <MicOff size={16} />}
             </button>
           </div>
           <button
